@@ -1,0 +1,229 @@
+C:\Users\heman>mysql --version
+mysql  Ver 8.0.29 for Win64 on x86_64 (MySQL Community Server - GPL)
+
+C:\Users\heman>mysql -u root -p
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 8.0.29 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.01 sec)
+
+mysql> create database cricket;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| cricket            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use cricket;
+Database changed
+mysql> create table cricketer (name varchar(15),runs int,fours int,sixes int,wickets int);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_cricket |
++-------------------+
+| cricketer         |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> insert into cricketer values ("Ash",506,20,19,4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into cricketer (name,runs,fours,sixes) values ("Garry",430,12,15),("Vipin",303,10,9);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into cricketer (name,wickets) values ("Gaurav",15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select *from cricketer;
++--------+------+-------+-------+---------+
+| name   | runs | fours | sixes | wickets |
++--------+------+-------+-------+---------+
+| Ash    |  506 |    20 |    19 |       4 |
+| Garry  |  430 |    12 |    15 |    NULL |
+| Vipin  |  303 |    10 |     9 |    NULL |
+| Gaurav | NULL |  NULL |  NULL |      15 |
++--------+------+-------+-------+---------+
+4 rows in set (0.00 sec)
+
+mysql> alter table cricketer add column century int;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select *from cricketer;
++--------+------+-------+-------+---------+---------+
+| name   | runs | fours | sixes | wickets | century |
++--------+------+-------+-------+---------+---------+
+| Ash    |  506 |    20 |    19 |       4 |    NULL |
+| Garry  |  430 |    12 |    15 |    NULL |    NULL |
+| Vipin  |  303 |    10 |     9 |    NULL |    NULL |
+| Gaurav | NULL |  NULL |  NULL |      15 |    NULL |
++--------+------+-------+-------+---------+---------+
+4 rows in set (0.00 sec)
+
+mysql> alter table cricketer rename column century to centuries;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select *from cricketer;
++--------+------+-------+-------+---------+-----------+
+| name   | runs | fours | sixes | wickets | centuries |
++--------+------+-------+-------+---------+-----------+
+| Ash    |  506 |    20 |    19 |       4 |      NULL |
+| Garry  |  430 |    12 |    15 |    NULL |      NULL |
+| Vipin  |  303 |    10 |     9 |    NULL |      NULL |
+| Gaurav | NULL |  NULL |  NULL |      15 |      NULL |
++--------+------+-------+-------+---------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> insert into cricketer (name,centuries) values ("Ash",1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select *from cricketer;
++--------+------+-------+-------+---------+-----------+
+| name   | runs | fours | sixes | wickets | centuries |
++--------+------+-------+-------+---------+-----------+
+| Ash    |  506 |    20 |    19 |       4 |      NULL |
+| Garry  |  430 |    12 |    15 |    NULL |      NULL |
+| Vipin  |  303 |    10 |     9 |    NULL |      NULL |
+| Gaurav | NULL |  NULL |  NULL |      15 |      NULL |
+| Ash    | NULL |  NULL |  NULL |    NULL |         1 |
++--------+------+-------+-------+---------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> update cricketer set centuries=1 where name=Ash;
+ERROR 1054 (42S22): Unknown column 'Ash' in 'where clause'
+mysql> update cricketer set centuries=1 where name="Ash";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 2  Changed: 1  Warnings: 0
+
+mysql> select *from cricketer;
++--------+------+-------+-------+---------+-----------+
+| name   | runs | fours | sixes | wickets | centuries |
++--------+------+-------+-------+---------+-----------+
+| Ash    |  506 |    20 |    19 |       4 |         1 |
+| Garry  |  430 |    12 |    15 |    NULL |      NULL |
+| Vipin  |  303 |    10 |     9 |    NULL |      NULL |
+| Gaurav | NULL |  NULL |  NULL |      15 |      NULL |
+| Ash    | NULL |  NULL |  NULL |    NULL |         1 |
++--------+------+-------+-------+---------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> delete from cricketer where centuries=1;
+Query OK, 2 rows affected (0.01 sec)
+
+mysql> select *from cricketer;
++--------+------+-------+-------+---------+-----------+
+| name   | runs | fours | sixes | wickets | centuries |
++--------+------+-------+-------+---------+-----------+
+| Garry  |  430 |    12 |    15 |    NULL |      NULL |
+| Vipin  |  303 |    10 |     9 |    NULL |      NULL |
+| Gaurav | NULL |  NULL |  NULL |      15 |      NULL |
++--------+------+-------+-------+---------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> insert into cricketer values ("Ash",506,20,19,4,1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into cricketer values ("Aryan",409,11,16,1,1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select *from cricketer;
++--------+------+-------+-------+---------+-----------+
+| name   | runs | fours | sixes | wickets | centuries |
++--------+------+-------+-------+---------+-----------+
+| Garry  |  430 |    12 |    15 |    NULL |      NULL |
+| Vipin  |  303 |    10 |     9 |    NULL |      NULL |
+| Gaurav | NULL |  NULL |  NULL |      15 |      NULL |
+| Ash    |  506 |    20 |    19 |       4 |         1 |
+| Aryan  |  409 |    11 |    16 |       1 |         1 |
++--------+------+-------+-------+---------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> alter table cricketer drop column centuries;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select *from cricketer;
++--------+------+-------+-------+---------+
+| name   | runs | fours | sixes | wickets |
++--------+------+-------+-------+---------+
+| Garry  |  430 |    12 |    15 |    NULL |
+| Vipin  |  303 |    10 |     9 |    NULL |
+| Gaurav | NULL |  NULL |  NULL |      15 |
+| Ash    |  506 |    20 |    19 |       4 |
+| Aryan  |  409 |    11 |    16 |       1 |
++--------+------+-------+-------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select name,runs from cricketer;
++--------+------+
+| name   | runs |
++--------+------+
+| Garry  |  430 |
+| Vipin  |  303 |
+| Gaurav | NULL |
+| Ash    |  506 |
+| Aryan  |  409 |
++--------+------+
+5 rows in set (0.00 sec)
+
+mysql> select *from cricketer where runs>400;
++-------+------+-------+-------+---------+
+| name  | runs | fours | sixes | wickets |
++-------+------+-------+-------+---------+
+| Garry |  430 |    12 |    15 |    NULL |
+| Ash   |  506 |    20 |    19 |       4 |
+| Aryan |  409 |    11 |    16 |       1 |
++-------+------+-------+-------+---------+
+3 rows in set (0.01 sec)
+
+mysql> select *from cricketer order by runs;
++--------+------+-------+-------+---------+
+| name   | runs | fours | sixes | wickets |
++--------+------+-------+-------+---------+
+| Gaurav | NULL |  NULL |  NULL |      15 |
+| Vipin  |  303 |    10 |     9 |    NULL |
+| Aryan  |  409 |    11 |    16 |       1 |
+| Garry  |  430 |    12 |    15 |    NULL |
+| Ash    |  506 |    20 |    19 |       4 |
++--------+------+-------+-------+---------+
+5 rows in set (0.00 sec)
+
+mysql> drop table cricketer;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
+Empty set (0.01 sec)
+
+mysql> exit
+Bye
